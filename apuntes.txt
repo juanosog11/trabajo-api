@@ -1,0 +1,34 @@
+"type": "module" ayuda para poder udar los imports
+
+
+bcryptjs : cifrar datos 
+
+cors: comunicar esta api con otros servidores de front end 
+
+dotenv: para crear variables de entorno
+
+jsonwebtoken: autenticar usuarios 
+
+morgan: ver consutlas por consola
+
+helmet: añade caracterisitcas de seguridad no ver versiones o falta validar, es mas en produccion
+
+nodemon: para visualizar o crear web o reiniciar el servidor
+
+@babel/cli": usar babel desde consola
+
+"@babel/core": estes es babel
+
+"@babel/node": usar babel atraves de node
+
+@babel/preset-env: modernizar el codigo de node.js
+
+
+"build": "babel src --out-dir build", // ejecutar en produccion para ser ejecutado en cualquier entorno
+
+
+"dev": "nodemon src/index.js --exec babel-node", // nodemon reiniciar codigo y babel ejecutar codigon sin importar la version
+
+"start": "node build/index.js" // codigo de produccion
+
+
