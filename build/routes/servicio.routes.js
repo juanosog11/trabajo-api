@@ -13,7 +13,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 var router = (0, _express.Router)();
 router.get('/servicios', [auten.verifytoken, auten.isAdminOrConductor], servicio_ctrl.getServicios);
 router.get('/servicios/:email', servicio_ctrl.getServiciosEmail);
-router.post('/servicios', servicio_ctrl.crearServicio);
+router.post('/add-servicios', servicio_ctrl.crearServicio);
 router.put('/servicios/:id', servicio_ctrl.actualizarServicio);
 router["delete"]('/servicios/:id', auten.verifytoken, servicio_ctrl.borrarServicio);
 var _default = exports["default"] = router;

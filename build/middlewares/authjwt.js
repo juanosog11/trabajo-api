@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.verifytoken = exports.isConductor = exports.isAdminOrConductor = exports.isAdmin = void 0;
+exports.verifytoken = exports.isConductor = exports.isAdminOrConductor = exports.isAdmin = exports.authRequired = void 0;
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 var _config = _interopRequireDefault(require("../config.js"));
 var _db = require("../db.js");
@@ -24,52 +24,48 @@ var verifytoken = exports.verifytoken = /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          _context.next = 2;
-          return req.headers["x-acces-token"];
-        case 2:
-          token = _context.sent;
-          _context.prev = 3;
+          token = req.cookies.token;
+          console.log(token);
+          _context.prev = 2;
           if (token) {
-            _context.next = 6;
+            _context.next = 5;
             break;
           }
           return _context.abrupt("return", res.status(403).json({
             message: 'No token provided'
           }));
-        case 6:
+        case 5:
           decoded = _jsonwebtoken["default"].verify(token, _config["default"].SECRET);
           req.email = decoded.id;
           email = decoded.id;
           console.log(email);
-          _context.next = 12;
+          _context.next = 11;
           return _db.pool.query("SELECT * FROM usuario WHERE email = ?", [email]);
-        case 12:
+        case 11:
           _yield$pool$query = _context.sent;
           _yield$pool$query2 = _slicedToArray(_yield$pool$query, 1);
           rows = _yield$pool$query2[0];
           if (!(rows.length <= 0)) {
-            _context.next = 19;
+            _context.next = 18;
             break;
           }
           return _context.abrupt("return", res.status(404).json({
             message: 'user not found'
           }));
-        case 19:
+        case 18:
           next();
-        case 20:
-          _context.next = 25;
+        case 19:
+          _context.next = 24;
           break;
-        case 22:
-          _context.prev = 22;
-          _context.t0 = _context["catch"](3);
-          return _context.abrupt("return", res.status(500).json({
-            error: "unauthorized"
-          }));
-        case 25:
+        case 21:
+          _context.prev = 21;
+          _context.t0 = _context["catch"](2);
+          return _context.abrupt("return", res.status(500).json(["unauthorized"]));
+        case 24:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[3, 22]]);
+    }, _callee, null, [[2, 21]]);
   }));
   return function verifytoken(_x, _x2, _x3) {
     return _ref.apply(this, arguments);
@@ -204,3 +200,4 @@ var isAdminOrConductor = exports.isAdminOrConductor = /*#__PURE__*/function () {
     return _ref4.apply(this, arguments);
   };
 }();
+var authRequired = exports.authRequired = function authRequired(req, res, next) {};

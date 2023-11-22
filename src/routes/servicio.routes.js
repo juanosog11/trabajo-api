@@ -10,7 +10,7 @@ router.get('/servicios', [auten.verifytoken,auten.isAdminOrConductor] ,servicio_
 
 router.get('/servicios/:email', servicio_ctrl.getServiciosEmail)
 
-router.post('/servicios',servicio_ctrl.crearServicio)
+router.post('/add-servicios',servicio_ctrl.crearServicio)
 
 router.put('/servicios/:id',servicio_ctrl.actualizarServicio)
 

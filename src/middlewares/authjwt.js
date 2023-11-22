@@ -3,11 +3,13 @@ import config from '../config.js';
 import { pool } from '../db.js';
 
 export const verifytoken = async (req,res,next) =>{
-    const token = await req.headers["x-acces-token"];
+    
+    const {token} = req.cookies;
+    console.log(token)
     try {
 
     if (!token) {
-        return res.status(403).json({message: 'No token provided'})
+        return res.status(403).json({message:'No token provided'})
     } 
 
     const decoded = jwt.verify(token,config.SECRET)
@@ -19,7 +21,7 @@ export const verifytoken = async (req,res,next) =>{
         const [rows] = await pool.query("SELECT * FROM usuario WHERE email = ?", [email])
 
         if (rows.length <= 0) {
-            return res.status(404).json({ message: 'user not found' })
+            return res.status(404).json({message:'user not found' })
         }
         else {
             next()
@@ -27,9 +29,9 @@ export const verifytoken = async (req,res,next) =>{
 
     
     } catch (error) {
-        return res.status(500).json({
-            error: "unauthorized"
-        })
+        return res.status(500).json([
+            "unauthorized"
+        ])
     }
 
 
@@ -93,4 +95,8 @@ export const isAdminOrConductor  = async (req,res,next) =>{
                 return res.status(404).json({ message: 'no tienes permiso' })
             }
         }
+}
+
+export const authRequired = (req,res,next) => {
+    
 }

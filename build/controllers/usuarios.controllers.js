@@ -94,11 +94,11 @@ var getUsuarioEmail = exports.getUsuarioEmail = /*#__PURE__*/function () {
 }();
 var crearUsuario = exports.crearUsuario = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req, res) {
-    var _req$body, nombre, apellido, fecha_nacimiento, email, telefono, contraseña, contraseña2, rol, _yield$pool$query5, _yield$pool$query6, rows;
+    var _req$body, nombre, apellido, email, telefono, contraseña, contraseña2, rol, _yield$pool$query5, _yield$pool$query6, rows;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          _req$body = req.body, nombre = _req$body.nombre, apellido = _req$body.apellido, fecha_nacimiento = _req$body.fecha_nacimiento, email = _req$body.email, telefono = _req$body.telefono, contraseña = _req$body.contraseña;
+          _req$body = req.body, nombre = _req$body.nombre, apellido = _req$body.apellido, email = _req$body.email, telefono = _req$body.telefono, contraseña = _req$body.contraseña;
           _context3.next = 3;
           return (0, _encrypt.encryptPassword)(contraseña);
         case 3:
@@ -107,7 +107,7 @@ var crearUsuario = exports.crearUsuario = /*#__PURE__*/function () {
           rol = 'Usuario';
           _context3.prev = 6;
           _context3.next = 9;
-          return _db.pool.query('INSERT INTO usuario (nombre, apellido, fecha_nacimiento, email, telefono, contraseña, rol) VALUES (?,?,?,?,?,?,?)', [nombre, apellido, fecha_nacimiento, email, telefono, contraseña2, rol]);
+          return _db.pool.query('INSERT INTO usuario (nombre, apellido, email, telefono, contraseña, rol) VALUES (?,?,?,?,?,?)', [nombre, apellido, email, telefono, contraseña2, rol]);
         case 9:
           _yield$pool$query5 = _context3.sent;
           _yield$pool$query6 = _slicedToArray(_yield$pool$query5, 1);
@@ -115,7 +115,6 @@ var crearUsuario = exports.crearUsuario = /*#__PURE__*/function () {
           res.send({
             nombre: nombre,
             apellido: apellido,
-            fecha_nacimiento: fecha_nacimiento,
             email: email,
             telefono: telefono,
             contraseña2: contraseña2,

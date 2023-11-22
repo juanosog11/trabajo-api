@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.signup = exports.signin = void 0;
+exports.verifyToken = exports.signup = exports.signin = exports.profile = exports.logout = exports.login = void 0;
 var _db = require("../db.js");
 var _encrypt = require("./encrypt.js");
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
@@ -21,14 +21,15 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 var signup = exports.signup = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
-    var _req$body, nombre, apellido, fecha_nacimiento, email, telefono, contraseña, rol, rut, razon_social, _yield$pool$query, _yield$pool$query2, rows2, contraseña2, rol2, _yield$pool$query3, _yield$pool$query4, rows, _yield$pool$query5, _yield$pool$query6, _rows, _yield$pool$query7, _yield$pool$query8, _rows2, id, token;
+    var _req$body, nombre, apellido, email, telefono, contraseña, rol, rut, razon_social, _yield$pool$query, _yield$pool$query2, rows2, contraseña2, rol2, _yield$pool$query3, _yield$pool$query4, rows, _yield$pool$query5, _yield$pool$query6, _rows, _yield$pool$query7, _yield$pool$query8, _rows2, id, token;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          _req$body = req.body, nombre = _req$body.nombre, apellido = _req$body.apellido, fecha_nacimiento = _req$body.fecha_nacimiento, email = _req$body.email, telefono = _req$body.telefono, contraseña = _req$body.contraseña, rol = _req$body.rol, rut = _req$body.rut, razon_social = _req$body.razon_social;
-          _context.next = 3;
+          _req$body = req.body, nombre = _req$body.nombre, apellido = _req$body.apellido, email = _req$body.email, telefono = _req$body.telefono, contraseña = _req$body.contraseña, rol = _req$body.rol, rut = _req$body.rut, razon_social = _req$body.razon_social;
+          _context.prev = 1;
+          _context.next = 4;
           return _db.pool.query("SELECT * FROM usuario WHERE email = ?", [email]);
-        case 3:
+        case 4:
           _yield$pool$query = _context.sent;
           _yield$pool$query2 = _slicedToArray(_yield$pool$query, 1);
           rows2 = _yield$pool$query2[0];
@@ -36,76 +37,66 @@ var signup = exports.signup = /*#__PURE__*/function () {
             _context.next = 36;
             break;
           }
-          _context.next = 9;
+          _context.next = 10;
           return (0, _encrypt.encryptPassword)(contraseña);
-        case 9:
+        case 10:
           contraseña2 = _context.sent;
-          console.log(contraseña2);
-          console.log(rol);
           if (!(rol == null)) {
-            _context.next = 21;
+            _context.next = 20;
             break;
           }
           rol2 = 'Usuario';
-          _context.next = 16;
-          return _db.pool.query('INSERT INTO usuario (nombre, apellido, fecha_nacimiento, email, telefono, contraseña, rol, rut, razon_social) VALUES (?,?,?,?,?,?,?,?,?)', [nombre, apellido, fecha_nacimiento, email, telefono, contraseña2, rol2, rut, razon_social]);
-        case 16:
+          _context.next = 15;
+          return _db.pool.query('INSERT INTO usuario (nombre, apellido, email, telefono, contraseña, rol, rut, razon_social) VALUES (?,?,?,?,?,?,?,?)', [nombre, apellido, email, telefono, contraseña2, rol2, rut, razon_social]);
+        case 15:
           _yield$pool$query3 = _context.sent;
           _yield$pool$query4 = _slicedToArray(_yield$pool$query3, 1);
           rows = _yield$pool$query4[0];
-          _context.next = 26;
+          _context.next = 25;
           break;
-        case 21:
-          _context.next = 23;
-          return _db.pool.query('INSERT INTO usuario (nombre, apellido, fecha_nacimiento, email, telefono, contraseña, rol, rut, razon_social) VALUES (?,?,?,?,?,?,?,?,?)', [nombre, apellido, fecha_nacimiento, email, telefono, contraseña2, rol, rut, razon_social]);
-        case 23:
+        case 20:
+          _context.next = 22;
+          return _db.pool.query('INSERT INTO usuario (nombre, apellido, email, telefono, contraseña, rol, rut, razon_social) VALUES (?,?,?,?,?,?,?,?)', [nombre, apellido, email, telefono, contraseña2, rol, rut, razon_social]);
+        case 22:
           _yield$pool$query5 = _context.sent;
           _yield$pool$query6 = _slicedToArray(_yield$pool$query5, 1);
           _rows = _yield$pool$query6[0];
-        case 26:
-          _context.next = 28;
+        case 25:
+          _context.next = 27;
           return _db.pool.query("SELECT * FROM usuario WHERE email = ?", [email]);
-        case 28:
+        case 27:
           _yield$pool$query7 = _context.sent;
           _yield$pool$query8 = _slicedToArray(_yield$pool$query7, 1);
           _rows2 = _yield$pool$query8[0];
-          // res.send({
-          //     nombre,
-          //     apellido,
-          //     fecha_nacimiento,
-          //     email,
-          //     telefono,
-          //     contraseña2,
-          //     rol,
-          //         })
           id = _rows2[0].email;
           token = _jsonwebtoken["default"].sign({
             id: id
           }, _config["default"].SECRET, {
             expiresIn: 86400
           });
+          res.cookie("token", token);
           res.json({
+            mes: "usuario creado",
             token: token
           });
           _context.next = 37;
           break;
         case 36:
-          res.send('user exist');
+          return _context.abrupt("return", res.status(400).json(['el correo ya existe']));
         case 37:
-          _context.prev = 37;
-          _context.next = 43;
+          _context.next = 42;
           break;
-        case 40:
-          _context.prev = 40;
-          _context.t0 = _context["catch"](37);
+        case 39:
+          _context.prev = 39;
+          _context.t0 = _context["catch"](1);
           return _context.abrupt("return", res.status(500).json({
             error: "Error getting employees"
           }));
-        case 43:
+        case 42:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[37, 40]]);
+    }, _callee, null, [[1, 39]]);
   }));
   return function signup(_x, _x2) {
     return _ref.apply(this, arguments);
@@ -148,7 +139,7 @@ var signin = exports.signin = /*#__PURE__*/function () {
           }, _config["default"].SECRET, {
             expiresIn: 86400
           });
-          res.json({
+          res.status(200).json({
             token: token
           });
           _context2.next = 19;
@@ -172,5 +163,204 @@ var signin = exports.signin = /*#__PURE__*/function () {
   }));
   return function signin(_x3, _x4) {
     return _ref2.apply(this, arguments);
+  };
+}();
+var login = exports.login = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req, res) {
+    var _req$body3, email, contraseña, _yield$pool$query11, _yield$pool$query12, rows2, iguales, id, token;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _req$body3 = req.body, email = _req$body3.email, contraseña = _req$body3.contraseña;
+          _context3.prev = 1;
+          _context3.next = 4;
+          return _db.pool.query("SELECT * FROM usuario WHERE email = ?", [email]);
+        case 4:
+          _yield$pool$query11 = _context3.sent;
+          _yield$pool$query12 = _slicedToArray(_yield$pool$query11, 1);
+          rows2 = _yield$pool$query12[0];
+          if (!(rows2.length > 0)) {
+            _context3.next = 19;
+            break;
+          }
+          _context3.next = 10;
+          return (0, _encrypt.desencryptPassword)(contraseña, rows2[0].contraseña);
+        case 10:
+          iguales = _context3.sent;
+          if (iguales) {
+            _context3.next = 13;
+            break;
+          }
+          return _context3.abrupt("return", res.status(401).json({
+            token: null,
+            message: 'invalid password'
+          }));
+        case 13:
+          id = rows2[0].email;
+          token = _jsonwebtoken["default"].sign({
+            id: id
+          }, _config["default"].SECRET, {
+            expiresIn: 86400
+          });
+          res.cookie("token", token);
+          res.json({
+            mes: "login exitoso",
+            token: token
+          });
+          _context3.next = 20;
+          break;
+        case 19:
+          res.send('user exist');
+        case 20:
+          _context3.next = 25;
+          break;
+        case 22:
+          _context3.prev = 22;
+          _context3.t0 = _context3["catch"](1);
+          return _context3.abrupt("return", res.status(500).json({
+            error: "Error getting employees"
+          }));
+        case 25:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[1, 22]]);
+  }));
+  return function login(_x5, _x6) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+var logout = exports.logout = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          res.cookie('token', "", {
+            expires: new Date(0)
+          });
+          return _context4.abrupt("return", res.status(200));
+        case 2:
+        case "end":
+          return _context4.stop();
+      }
+    }, _callee4);
+  }));
+  return function logout(_x7, _x8) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+var profile = exports.profile = /*#__PURE__*/function () {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(req, res) {
+    var _yield$pool$query13, _yield$pool$query14, rows;
+    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          _context5.prev = 0;
+          _context5.next = 3;
+          return _db.pool.query('SELECT * FROM usuario');
+        case 3:
+          _yield$pool$query13 = _context5.sent;
+          _yield$pool$query14 = _slicedToArray(_yield$pool$query13, 1);
+          rows = _yield$pool$query14[0];
+          res.send({
+            rows: rows
+          });
+          _context5.next = 12;
+          break;
+        case 9:
+          _context5.prev = 9;
+          _context5.t0 = _context5["catch"](0);
+          return _context5.abrupt("return", res.status(500).json({
+            error: "Error getting user"
+          }));
+        case 12:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5, null, [[0, 9]]);
+  }));
+  return function profile(_x9, _x10) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+var verifyToken = exports.verifyToken = /*#__PURE__*/function () {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req, res) {
+    var token;
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          token = req.cookies.token;
+          _context7.prev = 1;
+          if (token) {
+            _context7.next = 5;
+            break;
+          }
+          console.log('hola');
+          return _context7.abrupt("return", res.status(401).json({
+            message: 'Unauthorized'
+          }));
+        case 5:
+          ;
+          _jsonwebtoken["default"].verify(token, _config["default"].SECRET, /*#__PURE__*/function () {
+            var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(err, user) {
+              var _yield$pool$query15, _yield$pool$query16, rows2;
+              return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+                while (1) switch (_context6.prev = _context6.next) {
+                  case 0:
+                    if (!err) {
+                      _context6.next = 3;
+                      break;
+                    }
+                    console.log('hola2');
+                    return _context6.abrupt("return", res.status(401).json({
+                      message: 'No autorizado'
+                    }));
+                  case 3:
+                    _context6.next = 5;
+                    return _db.pool.query("SELECT * FROM usuario WHERE email = ?", [user.id]);
+                  case 5:
+                    _yield$pool$query15 = _context6.sent;
+                    _yield$pool$query16 = _slicedToArray(_yield$pool$query15, 1);
+                    rows2 = _yield$pool$query16[0];
+                    if (!(rows2.length <= 0)) {
+                      _context6.next = 13;
+                      break;
+                    }
+                    console.log('hol3');
+                    return _context6.abrupt("return", res.status(401).json({
+                      message: 'No autorizado'
+                    }));
+                  case 13:
+                    return _context6.abrupt("return", res.json({
+                      nombre: rows2.nombrem,
+                      apellido: rows2.apellido,
+                      email: rows2.email
+                    }));
+                  case 14:
+                  case "end":
+                    return _context6.stop();
+                }
+              }, _callee6);
+            }));
+            return function (_x13, _x14) {
+              return _ref7.apply(this, arguments);
+            };
+          }());
+          _context7.next = 12;
+          break;
+        case 9:
+          _context7.prev = 9;
+          _context7.t0 = _context7["catch"](1);
+          res.status(400).json({
+            message: 'fallo la verificacion'
+          });
+        case 12:
+        case "end":
+          return _context7.stop();
+      }
+    }, _callee7, null, [[1, 9]]);
+  }));
+  return function verifyToken(_x11, _x12) {
+    return _ref6.apply(this, arguments);
   };
 }();

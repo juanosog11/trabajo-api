@@ -42,7 +42,7 @@ export const getUsuarioEmail = async (req, res) => {
 };
 
 export const crearUsuario = async (req, res) => {
-    const { nombre, apellido, fecha_nacimiento, email, telefono, contraseña} = req.body
+    const { nombre, apellido, email, telefono, contraseña} = req.body
 
     const contraseña2 = await encryptPassword(contraseña);
     console.log(contraseña2)
@@ -50,13 +50,12 @@ export const crearUsuario = async (req, res) => {
 
     try {
         const [rows] = await pool.query(
-            'INSERT INTO usuario (nombre, apellido, fecha_nacimiento, email, telefono, contraseña, rol) VALUES (?,?,?,?,?,?,?)'
+            'INSERT INTO usuario (nombre, apellido, email, telefono, contraseña, rol) VALUES (?,?,?,?,?,?)'
 
-            , [nombre, apellido, fecha_nacimiento, email, telefono, contraseña2, rol]);
+            , [nombre, apellido, email, telefono, contraseña2, rol]);
         res.send({
             nombre,
             apellido,
-            fecha_nacimiento,
             email,
             telefono,
             contraseña2,
@@ -64,6 +63,8 @@ export const crearUsuario = async (req, res) => {
             rows
 
         })
+
+        
 
     } catch (error) {
         return res.status(500).json({
