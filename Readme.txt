@@ -11,6 +11,8 @@
 - JavaScript
 - Vue 
 
+NOTA: la base de datos esta deltro Api/src/db
+
 
 ## Live Demo (if available)
 
